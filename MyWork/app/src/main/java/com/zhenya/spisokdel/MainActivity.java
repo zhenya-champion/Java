@@ -4,10 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     private DataBase dataBase; //бд
     private ListView listView; //ссылаемся на ListView
     private ArrayAdapter<String> arrayAdapter;
+    private EditText list_name_field;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +37,33 @@ public class MainActivity extends AppCompatActivity {
 
         dataBase = new DataBase(this);
         listView = findViewById(R.id.task_list);
+        list_name_field = findViewById(R.id.list_name_field);
+        sharedPreferences = getPreferences(Context.MODE_PRIVATE); // работа с памятью телефона
+
+        String list_name = sharedPreferences.getString("list_name", "");
+        list_name_field.setText(list_name);
 
         loadAllTask();
+        changeTextAction();
+    }
+
+    //ввод новых символов
+    private void changeTextAction() {
+        list_name_field.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            //отслеживаем ввод пользователя
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                SharedPreferences.Editor editor = sharedPreferences.edit(); //помещаем значения в память телефона
+                editor.putString("list_name", String.valueOf(list_name_field.getText())); //сохраняем
+                editor.apply();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
     }
 
     //получаем все записи и выводим

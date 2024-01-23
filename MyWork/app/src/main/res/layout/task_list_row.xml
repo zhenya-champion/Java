@@ -12,6 +12,7 @@
         android:layout_marginStart="11dp"
         android:layout_marginTop="12dp"
         android:fontFamily="@font/montserrat_bold"
+        android:gravity="center_vertical"
         android:textSize="20sp" />
 
     <Button
@@ -20,7 +21,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="306dp"
         android:layout_marginTop="11dp"
-        android:layout_marginBottom="11dp"
         android:background="#D65959"
         android:fontFamily="@font/montserrat_bold"
         android:onClick="deleteTask"
